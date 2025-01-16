@@ -1,0 +1,3 @@
+/home/TU/tup80439/3207/project-2-linux-shell-tup80439/Shell_Root/build/CMakeFiles/main.dir
+/home/TU/tup80439/3207/project-2-linux-shell-tup80439/Shell_Root/build/CMakeFiles/edit_cache.dir
+/home/TU/tup80439/3207/project-2-linux-shell-tup80439/Shell_Root/build/CMakeFiles/rebuild_cache.dir

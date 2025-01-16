@@ -1,0 +1,8 @@
+CMakeCache.txt
+cmake_install.cmake
+goated
+hello
+jawner
+goat
+txt
+the goat

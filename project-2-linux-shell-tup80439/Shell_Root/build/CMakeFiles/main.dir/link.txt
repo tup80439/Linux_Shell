@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/main.dir/src/main.c.o CMakeFiles/main.dir/src/built_in_functions.c.o CMakeFiles/main.dir/src/helpers.c.o CMakeFiles/main.dir/src/fileFunctions.c.o -o main 

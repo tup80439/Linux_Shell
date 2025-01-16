@@ -1,0 +1,17 @@
+CMakeCache.txt
+CMakeFiles
+cmake_install.cmake
+demo
+demo.sh
+in.txt
+main
+Makefile
+output.txt
+out.txt
+p.c
+r.c
+s
+s.c
+shelltest.c
+sorted_patterns.txt
+t

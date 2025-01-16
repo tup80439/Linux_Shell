@@ -1,0 +1,4 @@
+cd [-L|[-P [-e]] [-@]] [dir]
+pwd
+exit [n]
+wait  

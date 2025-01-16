@@ -1,0 +1,121 @@
+// Pseudocode for Shell Implementation
+
+// Main Loop
+While true:
+    Print prompt to user ("tush$ ")
+    Flush output to ensure prompt is displayed
+    Get user input using fgets into `cmd`
+    
+    If input is blank or newline:
+        Continue to next iteration
+    
+    Parse input string into tokens (call `parse` function)
+    Remove surrounding quotes from tokens (call `stripQuotes` function)
+    
+    Check if the first token is a built-in command:
+        If built-in:
+            If the command includes '&':
+                Print error (built-ins cannot be backgrounded)
+            Else:
+                Call the appropriate built-in function using `funcCaller`
+            Free the parsed tokens
+        Else:
+            Check if the command includes pipes (call `wePiping` function)
+            If pipes exist:
+                Handle piping (call `pipeHelper` function)
+                Free the parsed tokens
+            Else:
+                Check if there's redirection (call `weRedirecting` function)
+                If redirection exists:
+                    Handle redirection (call `redirectHelper` function)
+                    Free the parsed tokens
+                Else:
+                    Resolve the command's path using `correctedInput`
+                    If path not found:
+                        Print error message and continue to next iteration
+                    Fork a new process
+                        In the child process:
+                            Execute the command using `execv`
+                            Handle errors if `execv` fails
+                        In the parent process:
+                            If the command ends with '&':
+                                Add its PID to the background list
+                            Else:
+                                Wait for the child process to finish
+                    Free the parsed tokens
+    Continue to next iteration
+
+// Parsing and Command Execution
+Function parse(input, delimiter):
+    Split the input string by spaces and newlines
+    Return array of tokens
+
+Function stripQuotes(string):
+    If the string has surrounding quotes:
+        Remove the quotes
+
+// Built-in Commands
+Function isBuiltIn(token):
+    Check if the first token is a built-in command
+    Return identifier for the built-in command
+
+Function funcCaller(parsedText, num):
+    Based on the identifier:
+        If quit:
+            Exit the shell
+        If pwd:
+            Print the current directory
+        If cd:
+            Change directory
+        If help:
+            Display available commands
+        If wait:
+            Wait for all background processes to complete
+
+// Piping
+Function wePiping(parsedArray):
+    Check for '|' symbols in the parsed array
+    Return true if pipes exist
+
+Function pipeHelper(numPipes, parsedArray, isBackground):
+    Split the command into segments based on '|'
+    Create pipes between the commands
+    For each command segment:
+        Fork a new process
+            In the child process:
+                If not the first command, set up input redirection from previous pipe
+                If not the last command, set up output redirection to next pipe
+                Execute the command using `execv`
+    Close all pipes in parent process
+    If not a background process, wait for all children to complete
+
+// Redirection
+Function weRedirecting(parsedArray):
+    Check for '<', '>', '>>', '<<' symbols in the parsed array
+    Return true if redirection exists
+
+Function redirectHelper(parsedArray, isBackground):
+    Identify input/output files from parsed array
+    Fork a new process
+        In the child process:
+            If input redirection is detected, redirect stdin to specified file
+            If output redirection is detected, redirect stdout to specified file
+            Execute the command using `execv`
+    If foreground process, wait for it to complete
+
+// Background Process Handling
+If command ends with '&':
+    Mark it as a background process
+    Store the PID in the global background list (`bg_pids`)
+
+Signal handler `sigchld_handler`:
+    Automatically reap completed background processes
+
+Function waitForBackgroundProcesses():
+    Wait for all background processes to finish
+
+// Path Resolution
+Function correctedInput(cmd):
+    Check if command already has an absolute or relative path
+    If not, search in directories listed in PATH environment variable
+    Return the resolved path or NULL if not found
